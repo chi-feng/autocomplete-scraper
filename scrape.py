@@ -72,6 +72,12 @@ def search(cursor, prefix, depth=0):
 
     # suggestions are incomplete (assume some got cut off) need to recurse
     elif len(suggestions) == options['max_suggestions']:
+        # if the prefix appears as itself in the suggested completions, then adding any additional characters will skip over it
+        # so we need to add it to the list of entries now
+        if prefix in suggestions:
+            cursor.execute("INSERT OR REPLACE INTO entries VALUES (?,?)", (prefix, prefix))
+        # since we don't know what other suggestions may have been cut off, we need to guess the next character
+        # TODO: intelligently guess based on current suggestions (know which character ranges to skip over if the suggestions are in alphabetic order)
         for char in options['allowed_chars']:
             search(cursor, prefix + char, depth + 1)
 
