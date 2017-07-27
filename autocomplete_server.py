@@ -2,6 +2,8 @@ import tornado.ioloop
 import tornado.web
 import json
 
+options = {'port':8888}
+
 wordlist = []
 with open('sorted.txt') as f:
     wordlist = f.read().splitlines()
@@ -25,5 +27,5 @@ def make_app():
 
 if __name__ == "__main__":
     app = make_app()
-    app.listen(8888)
+    app.listen(options['port'])
     tornado.ioloop.IOLoop.current().start()
